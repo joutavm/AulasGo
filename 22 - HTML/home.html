@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML</title>
+
+
+    <style>
+        h2 {
+            color: #c9c9c9;
+            font-size: 100px;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        marquee {
+            color: blue;
+        }
+    </style>
+
+</head>
+<body>
+    <h2> Página Principal </h2>
+    <button id="button"> Clique aqui </button>
+
+    <script>
+        let button = document.getElementById("button");
+        button.onclick = function() {
+            alert("Botao clicado com sucesso")
+        }
+    </script>
+</body>
+</html>
