@@ -61,5 +61,44 @@ func CreateUser(writter http.ResponseWriter, request *http.Request) {
 }
 
 func GetUsers(writter http.ResponseWriter, request *http.Request) {
+	db, err := database.Connect()
+	if err != nil {
+		writter.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to connect in db", err)
+		return
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM person")
+	if err != nil {
+		writter.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to query users", err)
+		return
+	}
+	defer rows.Close()
+
+	var users []user
+
+	for rows.Next() {
+		var user user
+		if err = rows.Scan(&user.ID, &user.Name, &user.Email); err != nil {
+			writter.WriteHeader(http.StatusInternalServerError)
+			log.Println("Failed to scan user", err)
+			return
+		}
+		users = append(users, user)
+	}
+
+	writter.Header().Set("Content-Type", "application/json")
+	writter.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(writter).Encode(users); err != nil {
+		writter.WriteHeader(http.StatusInternalServerError)
+		log.Println("Failed to parse response", err)
+		return
+	}
+
+}
+
+func GetUser(writter http.ResponseWriter, request *http.Request) {
 
 }
